@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wellness Snapshot Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+    }
+    .header {
+      width: 100%;
+      height: 200px;
+      background-image: url('https://images.unsplash.com/photo-1494390248081-4e521a5940db?q=80&w=2606&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+      background-size: cover;
+      background-position: center;
+      border-radius: 16px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-top: -80px;
+    }
+    h2 {
+      text-align: center;
+      color: #2d6a4f;
+    }
+    .question {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    select, input[type="email"], input[type="text"], input[type="tel"] {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #2d6a4f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1b4332;
+    }
+      /* Loading Overlay */
+      #loadingOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background-color: white; /* White background covering the whole page */
+      z-index: 9999;
+      }
+      
+      /* Center the gif inside the overlay */
+      .loadingGif {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      /* Adjust the size of the gif */
+      .loadingGif img {
+        width: 150px; /* Adjust size to make it smaller */
+        height: 150px;
+        background: none; /* Keep the gifs background transparent */
+  }
+
+</style>
+</head>
+
+<body>
+  <div class="header"></div>
+  
+  <div class="container">
+    <h2>What's Your Wellness Score?</h2>
+    <form id="wellnessQuiz">
+      <!-- Full Name -->
+      <div class="question">
+        <label>Full Name</label>
+        <input type="text" name="fullName" required />
+      </div>
+
+      <!-- Mobile Number -->
+      <div class="question">
+        <label>Mobile Number</label>
+        <input type="tel" name="mobile" pattern="[0-9]{10,}" placeholder="09XXXXXXXXX" required />
+      </div>
+
+      <!-- Nature of Work -->
+      <div class="question">
+        <label>Nature of Work</label>
+        <select name="workType" required>
+          <option value="">Please select</option>
+          <option value="Office/Corporate">Office/Corporate</option>
+          <option value="Freelancer/Remote">Freelancer/Remote</option>
+          <option value="Business Owner">Business Owner</option>
+          <option value="Healthcare/Wellness">Healthcare/Wellness</option>
+          <option value="Student">Student</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+
+      <!-- Wellness Questions -->
+      <div class="question">
+        <label>1. How would you rate your energy level?</label>
+        <select name="q1" required>
+          <option value="">Please select</option>
+          <option value="3">Always energized</option>
+          <option value="2">Sometimes tired</option>
+          <option value="1">Often exhausted</option>
+        </select>
+      </div>
+
+      <div class="question">
+        <label>2. Average hours of sleep?</label>
+        <select name="q2" required>
+          <option value="">Please select</option>
+          <option value="3">7–9 hours</option>
+          <option value="2">5–6 hours</option>
+          <option value="1">Less than 5</option>
+        </select>
+      </div>
+
+      <div class="question">
+        <label>3. How often do you eat fruits & veggies?</label>
+        <select name="q3" required>
+          <option value="">Please select</option>
+          <option value="3">Daily</option>
+          <option value="2">A few times a week</option>
+          <option value="1">Rarely</option>
+        </select>
+      </div>
+
+      <div class="question">
+        <label>4. Do you take supplements?</label>
+        <select name="q4" required>
+          <option value="">Please select</option>
+          <option value="3">Yes, daily</option>
+          <option value="2">Occasionally</option>
+          <option value="1">Not at all</option>
+        </select>
+      </div>
+
+      <!-- Email -->
+      <div class="question">
+        <label>Email Address (to receive your score & guide)</label>
+        <input type="email" name="email" required />
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay">
+  <div class="loadingGif">
+    <img src="loading.gif" alt="Loading..." />
+  </div>
+</div>
+
+
+  <script type="module">
+    document.getElementById("wellnessQuiz").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // Show the loading animation
+      document.getElementById("loadingOverlay").style.display = "flex";
+
+      const form = e.target;
+      const formData = new FormData(form);
+      let score = 0;
+
+      // Calculate the score
+      for (let [key, value] of formData.entries()) {
+        if (key.startsWith("q")) {
+          score += parseInt(value);
+        }
+      }
+
+      const fullName = formData.get("fullName");
+      const mobile = formData.get("mobile");
+      const workType = formData.get("workType");
+      const email = formData.get("email");
+
+      // Prepare the data to be sent to Google Sheets via the Apps Script
+      const postData = {
+        fullName,
+        mobile,
+        workType,
+        q1: formData.get("q1"),
+        q2: formData.get("q2"),
+        q3: formData.get("q3"),
+        q4: formData.get("q4"),
+        email,
+        score,
+      };
+
+      // Send the data to the Google Apps Script URL using fetch()
+      fetch('https://script.google.com/macros/s/AKfycbz2m3zyQTnimm-7xeT9LerjCeV7WMc9okrPivJj6r2wHcCEJKMFeT-x1yTCquN-9ufkyw/exec', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(postData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Hide the loading animation after processing
+        document.getElementById("loadingOverlay").style.display = "none";
+
+        if (data.status === "success") {
+          const encodedName = encodeURIComponent(fullName);
+          const encodedEmail = encodeURIComponent(email);
+          window.location.href = `thankyou.html?name=${encodedName}&score=${score}&email=${encodedEmail}`;
+        } else {
+          alert("Oops! Something went wrong. Please try again.");
+        }
+      })
+      .catch(error => {
+        // Hide the loading animation after an error
+        document.getElementById("loadingOverlay").style.display = "none";
+
+        console.error("Error:", error);
+        alert("Oops! Something went wrong. Please try again.");
+      });
+    });
+  </script>
+</body>
+</html>

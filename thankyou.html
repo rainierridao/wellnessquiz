@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thank You!</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #e9f5ec;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .message-box {
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 500px;
+    }
+    h2 {
+      color: #2d6a4f;
+    }
+    p {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="message-box">
+    <h2>Thank You, <span id="userName"></span>!</h2>
+    <p>Your wellness score is <strong id="userScore"></strong>/15.</p>
+    <p>We’ll send your personalized guide to <strong id="userEmail"></strong>.</p>
+    <p>Redirecting to home in 5 seconds...</p>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    document.getElementById("userName").textContent = urlParams.get("name") || "Friend";
+    document.getElementById("userScore").textContent = urlParams.get("score") || "0";
+    document.getElementById("userEmail").textContent = urlParams.get("email") || "your inbox";
+
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 5000);
+  </script>
+</body>
+</html>
