@@ -191,6 +191,19 @@
 
 
   <script type="module">
+
+
+function toProperCase(name) {
+  return name
+    .toLowerCase()
+    .split(" ")
+    .filter(word => word.trim() !== "")
+    .map(word => word[0].toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+
+
     document.getElementById("wellnessQuiz").addEventListener("submit", function (e) {
       e.preventDefault();
 
@@ -208,7 +221,7 @@
         }
       }
 
-      const fullName = formData.get("fullName");
+      const fullName = toProperCase(formData.get("fullName").trim());
       const mobile = formData.get("mobile");
       const workType = formData.get("workType");
       const email = formData.get("email");
